@@ -16,7 +16,7 @@
 4. datetime
 
 Контроллер пользователя
-1. findOne
+1. findOne/{userId}
 2. findAll
 3. create
 4. update/{userId}
