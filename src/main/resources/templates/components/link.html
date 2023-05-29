@@ -1,0 +1,5 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<a th:classappend="${currentUri == url ? 'link-primary' : 'link-secondary'}" th:fragment="link(url, name)"
+   th:href="${url}"
+   th:text="${name}"></a>
+</html>

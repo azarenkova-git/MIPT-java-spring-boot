@@ -1,0 +1,15 @@
+<html th:replace="~{components/layout :: layout(~{::content}, 'Create user')}" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="content">
+    <form method="post" th:action="@{/api/user/create}" th:object="${user}">
+        <div class="mb-3">
+            <div class="form-label">Email address</div>
+            <input class="form-control" placeholder="Username" th:field="*{username}" type="text">
+        </div>
+        <div class="mb-3">
+            <div class="form-label">Password</div>
+            <input class="form-control" placeholder="Password" th:field="*{password}" type="password">
+        </div>
+        <button class="btn btn-primary" type="submit">Сохранить</button>
+    </form>
+</div>
+</html>

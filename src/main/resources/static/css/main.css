@@ -1,0 +1,21 @@
+.mipt-layout {
+    height: 100vh;
+    width: 100vw;
+
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas:
+        "sidebar content"
+}
+
+.mipt-sidebar {
+    grid-area: sidebar;
+    border-right: 1px solid #e5e5e5;
+    padding: 15px;
+}
+
+.mipt-content {
+    grid-area: content;
+    padding: 15px;
+}
