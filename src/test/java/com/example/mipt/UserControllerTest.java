@@ -1,62 +1,55 @@
 package com.example.mipt;
 
 import com.example.mipt.dto.UserDto;
-import com.example.mipt.models.UserModel;
-import com.example.mipt.repositories.UserRepository;
-import com.example.mipt.utils.JsonUtils;
-import org.junit.jupiter.api.BeforeAll;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @BeforeAll
-    public void setup() {
-        UserModel user = new UserModel();
-        user.setUsername("testUsername");
-        userRepository.save(user);
-    }
-
     @Test
+    @WithUserDetails("admin")
     public void testCreateUser() throws Exception {
         UserDto userDto = new UserDto();
-        userDto.setUsername("anotherUsername");
+
+        String username = "username";
+        String password = "password";
+
+        userDto.setUsername(username);
+        userDto.setPassword(password);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/user/create")
-                .contentType("application/json")
-                .content(JsonUtils.toJson(userDto)))
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("anotherUsername"));
+                        .contentType("application/json")
+                        .param("username", userDto.getUsername())
+                        .param("password", userDto.getPassword())
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
     @Test
-    public void testFindUser() throws Exception {
-        UserModel user = userRepository.findByUsername("testUsername");
-
-        System.out.println(user.getId());
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/find/" + user.getId()))
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(user.getId()));
-    }
-
-    @Test
-    public void testFindAllUsers() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/find"))
-            .andExpect(MockMvcResultMatchers.status().isOk());
+    @WithUserDetails("admin")
+    public void testUsers() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/users"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("users"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("users"))
+                .andExpect(MockMvcResultMatchers.model().attribute("users", Matchers.hasSize(1)))
+                .andExpect(MockMvcResultMatchers.model().attribute("users", Matchers.hasItem(
+                        Matchers.allOf(
+                                Matchers.hasProperty("username", Matchers.is("admin"))
+                        )
+                )));
     }
 }
