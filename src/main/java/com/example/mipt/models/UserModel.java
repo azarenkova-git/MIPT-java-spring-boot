@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Set;
 
@@ -37,5 +39,13 @@ public class UserModel extends AbstractModel {
 
     public Set<MessageModel> getMessages() {
         return messages;
+    }
+
+    public UserDetails toUserDetails() {
+        return User.builder()
+                .username(getUsername())
+                .password(getPassword())
+                .roles("USER")
+                .build();
     }
 }
