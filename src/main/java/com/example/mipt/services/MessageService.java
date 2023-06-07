@@ -7,7 +7,10 @@ import com.example.mipt.models.UserModel;
 import com.example.mipt.repositories.ChatRepository;
 import com.example.mipt.repositories.MessagesRepository;
 import com.example.mipt.repositories.UserRepository;
+import com.example.mipt.utils.AdminData;
+import com.example.mipt.utils.NotificationsChatData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -35,28 +38,38 @@ public class MessageService {
     }
 
     public List<MessageModel> findByChatId(Long chatId) {
-//        ChatModel chat = chatRepository.findById(chatId).orElseThrow();
         return messagesRepository.findByChatId(chatId);
     }
 
     public void create(String username, Long chatId, MessageDto messageDto) {
         UserModel user = userRepository.findByUsername(username).orElseThrow();
         ChatModel chat = chatRepository.findById(chatId).orElseThrow();
+        createInternal(user, chat, messageDto);
+    }
+
+    private void create(String username, String chatName, MessageDto messageDto) {
+        UserModel user = userRepository.findByUsername(username).orElseThrow();
+        ChatModel chat = chatRepository.findByName(chatName).orElseThrow();
+        createInternal(user, chat, messageDto);
+    }
+
+    private void createInternal(UserModel user, ChatModel chat, MessageDto messageDto) {
         MessageModel message = new MessageModel();
         message.setText(messageDto.getText());
         message.setUser(user);
         message.setChat(chat);
         message.setDate(new Date());
         messagesRepository.save(message);
-        SseEmitter.SseEventBuilder eventBuilder = SseEmitter.event().name("messageCreated").data(message.getText());
+        String eventName = "chat-" + chat.getId() + "/messageCreated";
+        System.out.println("Sending event: " + eventName);
+        SseEmitter.SseEventBuilder eventBuilder = SseEmitter.event().name(eventName).data(message.getText());
         sseService.broadcast(eventBuilder);
     }
 
-//    @Scheduled(fixedRate = 60000, initialDelay = 60000)
-//    private void createNewMessageEveryMinute() {
-//        System.out.println("Creating new message");
-//        MessageDto messageDto = new MessageDto();
-//        messageDto.setText("New message " + new Date());
-//        create("admin", messageDto);
-//    }
+    @Scheduled(fixedRate = 60000, initialDelay = 60000)
+    private void createNewMessageEveryMinute() {
+        MessageDto messageDto = new MessageDto();
+        messageDto.setText("One minute passed. I am very creative btw.");
+        create(AdminData.USERNAME, NotificationsChatData.NAME, messageDto);
+    }
 }

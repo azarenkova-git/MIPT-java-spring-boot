@@ -35,6 +35,7 @@ public class SseService {
             try {
                 emitter.send(event);
             } catch (Exception ex) {
+                System.out.println(ex.getMessage());
                 emitter.completeWithError(ex);
                 failures.add(emitter);
             }

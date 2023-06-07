@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface ChatRepository extends JpaRepository<ChatModel, Long> {
     Optional<ChatModel> findByName(String name);
+    Boolean existsByName(String name);
 }

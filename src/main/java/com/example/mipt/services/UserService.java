@@ -5,7 +5,9 @@ import com.example.mipt.models.UserModel;
 import com.example.mipt.repositories.UserRepository;
 import com.example.mipt.utils.AdminData;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +20,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Autowired
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -54,7 +57,11 @@ public class UserService {
                     .findByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException(username));
 
-            return userModel.toUserDetails();
+            return User.builder()
+                   .username(userModel.getUsername())
+                   .password(userModel.getPassword())
+                   .roles("USER")
+                   .build();
         };
     }
 }

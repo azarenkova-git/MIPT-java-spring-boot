@@ -3,6 +3,8 @@ package com.example.mipt.services;
 import com.example.mipt.dto.ChatDto;
 import com.example.mipt.models.ChatModel;
 import com.example.mipt.repositories.ChatRepository;
+import com.example.mipt.utils.NotificationsChatData;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -28,8 +30,20 @@ public class ChatService {
         ChatModel chat = new ChatModel();
         chat.setName(chatDto.getName());
         chatRepository.save(chat);
-        SseEmitter.SseEventBuilder eventBuilder = SseEmitter.event().name("chatCreated").data(chat.getName());
+        String eventName = "chatCreated";
+        SseEmitter.SseEventBuilder eventBuilder = SseEmitter.event().name(eventName).data(chat.getName());
         sseService.broadcast(eventBuilder);
         return chat;
+    }
+
+    @PostConstruct
+    private void initNotificationsChat() {
+        if (chatRepository.existsByName(NotificationsChatData.NAME)) {
+            return;
+        }
+
+        ChatDto chatDto = new ChatDto();
+        chatDto.setName(NotificationsChatData.NAME);
+        create(chatDto);
     }
 }
