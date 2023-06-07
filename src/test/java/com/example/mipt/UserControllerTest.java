@@ -1,6 +1,7 @@
 package com.example.mipt;
 
 import com.example.mipt.dto.UserDto;
+import com.example.mipt.utils.AdminData;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @WithUserDetails("admin")
+    @WithUserDetails(AdminData.USERNAME)
     public void testCreateUser() throws Exception {
         UserDto userDto = new UserDto();
 
@@ -39,7 +40,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @WithUserDetails("admin")
+    @WithUserDetails(AdminData.USERNAME)
     public void testUsers() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/users"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -48,7 +49,7 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.model().attribute("users", Matchers.hasSize(1)))
                 .andExpect(MockMvcResultMatchers.model().attribute("users", Matchers.hasItem(
                         Matchers.allOf(
-                                Matchers.hasProperty("username", Matchers.is("admin"))
+                                Matchers.hasProperty("username", Matchers.is(AdminData.USERNAME))
                         )
                 )));
     }

@@ -1,0 +1,23 @@
+<html th:replace="~{components/layout :: layout(~{::content}, 'Messages')}" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="content">
+    <table class="table">
+        <tr>
+            <th>Date</th>
+            <th>Username</th>
+            <th>Text</th>
+        </tr>
+        <tr th:each="message : ${messages}">
+            <td th:text="${message.date}"></td>
+            <td th:text="${message.user.username}"></td>
+            <td th:text="${message.text}"></td>
+        </tr>
+    </table>
+    <form method="post" th:action="@{/api/message/create/{chatId}(chatId=${chatId})}" th:object="${messageDto}">
+        <div class="mb-3">
+            <div class="form-label">Email address</div>
+            <input class="form-control" placeholder="Message" th:field="*{text}" type="text">
+        </div>
+        <button class="btn btn-primary" type="submit">Save</button>
+    </form>
+</div>
+</html>

@@ -6,6 +6,8 @@
         <div class="mipt-sidebar-links">
             <a th:replace="~{components/link :: link('/users', 'Users')}"></a>
             <a th:replace="~{components/link :: link('/createUser', 'Create user')}"></a>
+            <a th:replace="~{components/link :: link('/createChat', 'Create chat')}"></a>
+            <a th:replace="~{components/link :: link('/chats', 'Chats')}"></a>
         </div>
         <form th:action="@{/logout}" method="post">
             <input class="input" type="submit" value="Sign Out"/>

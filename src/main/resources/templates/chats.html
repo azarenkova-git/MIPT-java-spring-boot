@@ -1,0 +1,14 @@
+<html th:replace="~{components/layout :: layout(~{::content}, 'Chats')}" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="content">
+    <table class="table">
+        <tr>
+            <th>Name</th>
+        </tr>
+        <tr th:each="chat : ${chats}">
+            <td>
+                <a th:text="${chat.name}" th:href="@{/messages/{chatId}(chatId=${chat.id})}"></a>
+            </td>
+        </tr>
+    </table>
+</div>
+</html>
