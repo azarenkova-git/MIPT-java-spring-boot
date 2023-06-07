@@ -12,7 +12,7 @@ public class SseService {
     List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
     public SseEmitter init() {
-        SseEmitter emitter = new SseEmitter ();
+        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
 
         emitter.onCompletion(() -> {
             emitters.remove(emitter);

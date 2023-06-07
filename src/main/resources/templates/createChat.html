@@ -1,0 +1,11 @@
+<html th:replace="~{components/layout :: layout(~{::content}, 'Create chat')}" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="content">
+  <form method="post" th:action="@{/api/chat/create}" th:object="${chatDto}">
+    <div class="mb-3">
+      <div class="form-label">Name</div>
+      <input class="form-control" placeholder="Enter something..." th:field="*{name}" type="text">
+    </div>
+    <button class="btn btn-primary" type="submit">Save</button>
+  </form>
+</div>
+</html>

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -24,21 +25,23 @@ public class MessageController {
         this.messageService = messageService;
     }
 
-    @GetMapping("/messages")
-    public String messages(Model model) {
-        List<MessageModel> messages = messageService.findAll();
+    @GetMapping("/messages/{chatId}")
+    public String messages(Model model, @PathVariable Long chatId) {
+        List<MessageModel> messages = messageService.findByChatId(chatId);
         model.addAttribute("messages", messages);
         MessageDto messageDto = new MessageDto();
-        model.addAttribute("message", messageDto);
+        model.addAttribute("messageDto", messageDto);
+        model.addAttribute("chatId", chatId);
         return "messages";
     }
 
-    @PostMapping("/api/message/create")
+    @PostMapping("/api/message/create/{chatId}")
     public RedirectView createMessage(
             @ModelAttribute MessageDto messageDto,
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long chatId
     ) {
-        messageService.createMessage(userDetails.getUsername(), messageDto);
-        return new RedirectView("/messages");
+        messageService.create(userDetails.getUsername(), chatId, messageDto);
+        return new RedirectView("/messages/" + chatId);
     }
 }

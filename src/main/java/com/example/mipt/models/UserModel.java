@@ -2,12 +2,10 @@ package com.example.mipt.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Set;
 
 @Entity
 @Table(name = "app_user")
@@ -17,9 +15,6 @@ public class UserModel extends AbstractModel {
 
     @Column(name = "password")
     private String password;
-
-    @OneToMany()
-    private Set<MessageModel> messages;
 
     public String getUsername() {
         return username;
@@ -35,10 +30,6 @@ public class UserModel extends AbstractModel {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Set<MessageModel> getMessages() {
-        return messages;
     }
 
     public UserDetails toUserDetails() {

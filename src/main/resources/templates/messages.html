@@ -12,7 +12,7 @@
             <td th:text="${message.text}"></td>
         </tr>
     </table>
-    <form method="post" th:action="@{/api/message/create}" th:object="${message}">
+    <form method="post" th:action="@{/api/message/create/{chatId}(chatId=${chatId})}" th:object="${messageDto}">
         <div class="mb-3">
             <div class="form-label">Email address</div>
             <input class="form-control" placeholder="Message" th:field="*{text}" type="text">

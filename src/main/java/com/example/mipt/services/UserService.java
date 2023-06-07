@@ -3,6 +3,7 @@ package com.example.mipt.services;
 import com.example.mipt.dto.UserDto;
 import com.example.mipt.models.UserModel;
 import com.example.mipt.repositories.UserRepository;
+import com.example.mipt.utils.AdminData;
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -36,26 +37,22 @@ public class UserService {
 
     @PostConstruct
     private void initAdmin() {
-        UserModel existingAdmin = userRepository.findByUsername("admin");
-
-        if (existingAdmin != null) {
+        if (userRepository.existsByUsername(AdminData.USERNAME)) {
             return;
         }
 
         UserDto dto = new UserDto();
-        dto.setUsername("admin");
-        dto.setPassword("password");
+        dto.setUsername(AdminData.USERNAME);
+        dto.setPassword(AdminData.PASSWORD);
         create(dto);
     }
 
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> {
-            UserModel userModel = userRepository.findByUsername(username);
-
-            if (userModel == null) {
-                throw new UsernameNotFoundException(username);
-            }
+            UserModel userModel = userRepository
+                    .findByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException(username));
 
             return userModel.toUserDetails();
         };

@@ -20,6 +20,9 @@ public class MessageModel extends AbstractModel {
     @Column(name = "date")
     private Date date;
 
+    @ManyToOne()
+    private ChatModel chat;
+
     public UserModel getUser() {
         return user;
     }
@@ -42,5 +45,13 @@ public class MessageModel extends AbstractModel {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public ChatModel getChat() {
+        return chat;
+    }
+
+    public void setChat(ChatModel chat) {
+        this.chat = chat;
     }
 }
