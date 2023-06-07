@@ -69,7 +69,7 @@ public class MessageService {
     @Scheduled(fixedRate = 60000, initialDelay = 60000)
     private void createNewMessageEveryMinute() {
         MessageDto messageDto = new MessageDto();
-        messageDto.setText("Minute has passed");
+        messageDto.setText("One minute passed. I am very creative btw.");
         create(AdminData.USERNAME, NotificationsChatData.NAME, messageDto);
     }
 }
