@@ -31,8 +31,6 @@ public class SseService {
     public void broadcast(SseEmitter.SseEventBuilder event) {
         List<SseEmitter> failures = new ArrayList<>();
 
-        System.out.println("Broadcasting event: " + event);
-
         emitters.forEach(emitter -> {
             try {
                 emitter.send(event);
