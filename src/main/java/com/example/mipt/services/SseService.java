@@ -31,10 +31,13 @@ public class SseService {
     public void broadcast(SseEmitter.SseEventBuilder event) {
         List<SseEmitter> failures = new ArrayList<>();
 
+        System.out.println("Broadcasting event: " + event);
+
         emitters.forEach(emitter -> {
             try {
                 emitter.send(event);
             } catch (Exception ex) {
+                System.out.println(ex.getMessage());
                 emitter.completeWithError(ex);
                 failures.add(emitter);
             }

@@ -35,7 +35,6 @@ public class MessageService {
     }
 
     public List<MessageModel> findByChatId(Long chatId) {
-//        ChatModel chat = chatRepository.findById(chatId).orElseThrow();
         return messagesRepository.findByChatId(chatId);
     }
 
@@ -48,7 +47,9 @@ public class MessageService {
         message.setChat(chat);
         message.setDate(new Date());
         messagesRepository.save(message);
-        SseEmitter.SseEventBuilder eventBuilder = SseEmitter.event().name("messageCreated").data(message.getText());
+        String eventName = "chat-" + chatId + "/messageCreated";
+        System.out.println("Sending event: " + eventName);
+        SseEmitter.SseEventBuilder eventBuilder = SseEmitter.event().name(eventName).data(message.getText());
         sseService.broadcast(eventBuilder);
     }
 
