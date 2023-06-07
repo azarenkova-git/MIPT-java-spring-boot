@@ -1,10 +1,8 @@
 package com.example.mipt.services;
 
 import com.example.mipt.dto.ChatDto;
-import com.example.mipt.dto.UserDto;
 import com.example.mipt.models.ChatModel;
 import com.example.mipt.repositories.ChatRepository;
-import com.example.mipt.utils.AdminData;
 import com.example.mipt.utils.NotificationsChatData;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +37,7 @@ public class ChatService {
     }
 
     @PostConstruct
-    private void initAdmin() {
+    private void initNotificationsChat() {
         if (chatRepository.existsByName(NotificationsChatData.NAME)) {
             return;
         }

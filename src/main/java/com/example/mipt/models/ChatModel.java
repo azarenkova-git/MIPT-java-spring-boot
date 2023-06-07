@@ -2,7 +2,6 @@ package com.example.mipt.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -14,7 +13,7 @@ public class ChatModel extends AbstractModel {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "chat")
     private List<MessageModel> messages;
 
     public void setName(String name) {
