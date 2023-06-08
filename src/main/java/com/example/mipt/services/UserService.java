@@ -38,6 +38,9 @@ public class UserService {
         userRepository.save(user);
     }
 
+    /**
+     * Создаёт админа, если его нет в базе, при запуске приложения
+     */
     @PostConstruct
     private void initAdmin() {
         if (userRepository.existsByUsername(AdminData.USERNAME)) {
@@ -58,10 +61,10 @@ public class UserService {
                     .orElseThrow(() -> new UsernameNotFoundException(username));
 
             return User.builder()
-                   .username(userModel.getUsername())
-                   .password(userModel.getPassword())
-                   .roles("USER")
-                   .build();
+                    .username(userModel.getUsername())
+                    .password(userModel.getPassword())
+                    .roles("USER")
+                    .build();
         };
     }
 }

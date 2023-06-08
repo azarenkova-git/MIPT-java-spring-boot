@@ -66,6 +66,9 @@ public class MessageService {
         sseService.broadcast(eventBuilder);
     }
 
+    /**
+     * Создаёт сообщение в чате уведомлений каждую минуту
+     */
     @Scheduled(fixedRate = 60000, initialDelay = 60000)
     private void createNewMessageEveryMinute() {
         MessageDto messageDto = new MessageDto();

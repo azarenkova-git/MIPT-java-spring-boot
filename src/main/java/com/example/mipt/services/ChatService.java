@@ -36,6 +36,9 @@ public class ChatService {
         return chat;
     }
 
+    /**
+     * Создаёт чат для уведомлений, если его ещё нет.
+     */
     @PostConstruct
     private void initNotificationsChat() {
         if (chatRepository.existsByName(NotificationsChatData.NAME)) {

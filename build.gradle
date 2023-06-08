@@ -12,11 +12,20 @@ repositories {
 group = 'com.example'
 version = '1.0.0'
 
+mainClassName = 'com.example.mipt.Application'
+
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
 test {
     useJUnitPlatform()
+}
+
+tasks.register('generateJavadoc', Javadoc) {
+    source = sourceSets.main.java
+    classpath = sourceSets.main.compileClasspath
+    destinationDir = file("${buildDir}/docs/javadoc")
+    options.encoding = 'UTF-8'
 }
 
 dependencies {
