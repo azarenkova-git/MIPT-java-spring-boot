@@ -8,6 +8,11 @@
 Раз в минуту в чат “Notifications” от лица пользователя “admin” отсылается сообщение “One minute passed. I am very
 creative btw.”.
 
+### Системные требования
+
+JDK 17
+Grable 8
+
 ### Инструкция по запуску
 
 Для быстрого запуска в любой среде - `docker-compose up`.
